@@ -72,7 +72,6 @@ class Tank:
         self.keySHOT = keyList[4]
 
     def update(self):
-        print('error')
         keys = pygame.key.get_pressed()
         if keys[self.keyLEFT]:
             self.rect.x -= self.moveSpeed
