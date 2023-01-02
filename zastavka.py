@@ -50,21 +50,7 @@ def start_screen():
                             window = pygame.display.set_mode((WIDTH, HEIGHT))
 
                             tanki()
-                        #     play = True
-                        #     while play:
-                        #         for event in pygame.event.get():
-                        #             if event.type == pygame.QUIT:
-                        #                 play = False
-                        #         keys = pygame.key.get_pressed()
-                        #         for obj in objects:
-                        #             obj.update()
-                        #
-                        #         screen.fill('black')
-                        #         for obj in objects:
-                        #
-                        #             obj.draw()
-                        #         pygame.display.update()
-                        #         clock.tick(FPS)
+    
         pygame.display.flip()
         clock.tick(FPS)
 
