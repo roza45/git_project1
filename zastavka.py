@@ -48,12 +48,6 @@ def start_screen():
                         print(0, rect, coord.index(rect))
         pygame.display.flip()
         clock.tick(FPS)
-def update(self,*args):
-    if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-            self.rect.collidepoint(args[0].pos):
-        self.image = self.image_boom
-        # rect.collidepoint(pos) проверяет, находится ли точка с координатами pos
-        # внутри прямоугольника
 
 
 
