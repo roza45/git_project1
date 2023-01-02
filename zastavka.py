@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 
-
+pygame.init()
 def load_image(name, colorkey='black'):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
@@ -45,35 +45,106 @@ def start_screen():
                     event.type == pygame.MOUSEBUTTONDOWN:
                 for rect in coord:
                     if rect.collidepoint(event.pos):
-                        print(0, rect, coord.index(rect))
+                        kuda = coord.index(rect)
+                        if kuda == 4:
+                            window = pygame.display.set_mode((WIDTH, HEIGHT))
+
+                            tanki()
+                        #     play = True
+                        #     while play:
+                        #         for event in pygame.event.get():
+                        #             if event.type == pygame.QUIT:
+                        #                 play = False
+                        #         keys = pygame.key.get_pressed()
+                        #         for obj in objects:
+                        #             obj.update()
+                        #
+                        #         screen.fill('black')
+                        #         for obj in objects:
+                        #
+                        #             obj.draw()
+                        #         pygame.display.update()
+                        #         clock.tick(FPS)
         pygame.display.flip()
         clock.tick(FPS)
 
 
+class Tank:
+    def __init__(self, color, px, py, direct, keyList):
+        objects.append(self)
+        self.type = 'tank'
 
-pygame.init()
-pygame.key.set_repeat(200, 70)
+        self.color = color
+        self.rect = pygame.Rect(px, py, TILE, TILE)
+        self.direct = direct
+        self.moveSpeed = 2
+
+        self.keyLEFT = keyList[0]
+        self.keyRIGHT = keyList[1]
+        self.keyUP = keyList[2]
+        self.keyDOWN = keyList[3]
+        self.keySHOT = keyList[4]
+
+    def update(self):
+        print('error')
+        keys = pygame.key.get_pressed()
+        if keys[self.keyLEFT]:
+            self.rect.x -= self.moveSpeed
+            self.direct = 3
+        elif keys[self.keyRIGHT]:
+            self.rect.x += self.moveSpeed
+            self.direct = 1
+        elif keys[self.keyUP]:
+            self.rect.y -= self.moveSpeed
+            self.direct = 0
+        elif keys[self.keyDOWN]:
+            self.rect.y += self.moveSpeed
+            self.direct = 2
+
+    def draw(self):
+        pygame.draw.rect(screen, self.color, self.rect)
+
+        x = self.rect.centerx + DIRECTS[self.direct][0] * 30
+        y = self.rect.centery + DIRECTS[self.direct][1] * 30
+        pygame.draw.line(screen, 'white', self.rect.center, (x, y), 4)
+def tanki():
+
+    play = True
+    while play:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                play = False
+        keys = pygame.key.get_pressed()
+        for obj in objects:
+            obj.update()
+
+        screen.fill('black')
+        for obj in objects:
+            obj.draw()
+        pygame.display.update()
+        clock.tick(FPS)
+
 
 FPS = 50
 STEP = 5
-size = WIDTH, HEIGHT = 800, 400
+TILE =32
+size = WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
+objects = []
 
 tile_width = tile_height = 50
+Tank('blue', 100, 275, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
+Tank('red', 650, 275, 0, (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, pygame.K_KP_ENTER))
+DIRECTS = [[0, -1], [1, 0], [0, 1], [-1, 0]]
+
+
+
 
 
 start_screen()
-running = True
-# while running:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-#     screen.fill(pygame.Color("white"))
-#     pygame.display.flip()
 
 pygame.quit()
 terminate()
-
 
 
