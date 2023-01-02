@@ -1,8 +1,10 @@
 import os
 import sys
 import pygame
+from random import randint
 
 pygame.init()
+fontUI = pygame.font.Font(None, 30)
 def load_image(name, colorkey='black'):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
@@ -51,7 +53,23 @@ def start_screen():
         pygame.display.flip()
         clock.tick(FPS)
 
+class UI:
+    def __init__(self):
+        pass
 
+    def update(self):
+        pass
+
+    def draw(self):
+        i = 0
+        for obj in objects:
+            if obj.type == 'tank':
+                pygame.draw.rect(screen, obj.color, (5 + i * 70, 5, 22, 22))
+
+                text = fontUI.render(str(obj.hp), 1, obj.color)
+                rect = text.get_rect(center=(5 + i * 70 + 32, 5 + 11))
+                screen.blit(text, rect)
+                i += 1
 class Tank:
     def __init__(self, color, px, py, direct, keyList):
         objects.append(self)
@@ -76,6 +94,7 @@ class Tank:
 
     def update(self):
         keys = pygame.key.get_pressed()
+        oldX, oldY = self.rect.topleft
         if keys[self.keyLEFT]:
             self.rect.x -= self.moveSpeed
             self.direct = 3
@@ -88,6 +107,10 @@ class Tank:
         elif keys[self.keyDOWN]:
             self.rect.y += self.moveSpeed
             self.direct = 2
+
+        for obj in objects:
+            if obj != self and self.rect.colliderect(obj.rect):
+                self.rect.topleft = oldX, oldY
 
         if keys[self.keySHOT] and self.shotTimer == 0:
             dx = DIRECTS[self.direct][0] * self.bulletSpeed
@@ -134,9 +157,39 @@ class Bullet:
 
     def draw(self):
         pygame.draw.circle(screen, 'yellow', (self.px, self.py), 2)
+class Block:
+    def __init__(self, px, py, size):
+        objects.append(self)
+        self.type = 'block'
+
+        self.rect = pygame.Rect(px, py, size, size)
+        self.hp = 1
+
+    def update(self):
+        pass
+
+    def draw(self):
+        pygame.draw.rect(screen, 'green', self.rect)
+        pygame.draw.rect(screen, 'gray20', self.rect, 2)
+
+    def damage(self, value):
+        self.hp -= value
+        if self.hp <= 0: objects.remove(self)
 
 
 def tanki():
+    for _ in range(50):
+        while True:
+            x = randint(0, WIDTH // TILE - 1) * TILE
+            y = randint(0, HEIGHT // TILE - 1) * TILE
+            rect = pygame.Rect(x, y, TILE, TILE)
+            fined = False
+            for obj in objects:
+                if rect.colliderect(obj.rect): fined = True
+
+            if not fined: break
+
+        Block(x, y, TILE)
     play = True
     while play:
         for event in pygame.event.get():
@@ -145,11 +198,11 @@ def tanki():
 
         for bullet in bullets: bullet.update()
         for obj in objects: obj.update()
-
+        ui.update()
         screen.fill('black')
         for bullet in bullets: bullet.draw()
         for obj in objects: obj.draw()
-
+        ui.draw()
         pygame.display.update()
         clock.tick(FPS)
 
@@ -167,7 +220,7 @@ tile_width = tile_height = 50
 Tank('blue', 100, 275, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
 Tank('red', 650, 275, 0, (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, pygame.K_RETURN))
 DIRECTS = [[0, -1], [1, 0], [0, 1], [-1, 0]]
-
+ui = UI()
 
 
 
