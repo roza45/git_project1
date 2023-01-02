@@ -76,7 +76,7 @@ class Tank:
         self.type = 'tank'
 
         self.color = color
-        self.rect = pygame.Rect(px, py, TILE, TILE)
+        self.rect = pygame.Rect(px, py, TILE - 3, TILE - 3)
         self.direct = direct
         self.moveSpeed = 2
         self.hp = 5
@@ -169,8 +169,7 @@ class Block:
         pass
 
     def draw(self):
-        pygame.draw.rect(screen, 'green', self.rect)
-        pygame.draw.rect(screen, 'gray20', self.rect, 2)
+        screen.blit(imgBrick, self.rect)
 
     def damage(self, value):
         self.hp -= value
@@ -215,6 +214,9 @@ screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 objects = []
 bullets = []
+imageblock = load_image('box.png')
+imgBrick = pygame.transform.scale(imageblock, (TILE, TILE))
+
 
 tile_width = tile_height = 50
 Tank('blue', 100, 275, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
