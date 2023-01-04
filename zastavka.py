@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 from random import randint
-deed = ''
+died = ''
 pygame.init()
 fontUI = pygame.font.Font(None, 30)
 def load_image(name, colorkey='black'):
@@ -132,8 +132,8 @@ class Tank:
         self.hp -= value
         if self.hp <= 0:
             objects.remove(self)
-            global deed
-            deed = self.color
+            global died
+            died = self.color
 
 class Bullet:
     def __init__(self, parent, px, py, dx, dy, damage):
@@ -178,7 +178,7 @@ class Block:
             objects.remove(self)
 
 def tanki():
-    global deed
+    global died
     for _ in range(50):
         while True:
             x = randint(0, WIDTH // tile - 1) * tile
@@ -211,7 +211,7 @@ def tanki():
         if c != 2:
             screen.fill((0, 0, 0))
             font = pygame.font.Font(None, 50)
-            text = font.render(f'deed {deed}', True, 'green')
+            text = font.render(f'deed {died}', True, 'green')
             screen.blit(text, (250, 250))
             pygame.display.update()
         else:
