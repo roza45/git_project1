@@ -211,7 +211,7 @@ def tanki():
         if c != 2:
             screen.fill((0, 0, 0))
             font = pygame.font.Font(None, 50)
-            text = font.render(f'deed {died}', True, 'green')
+            text = font.render(f'Проиграл {died}', True, 'green')
             screen.blit(text, (250, 250))
             pygame.display.update()
         else:
