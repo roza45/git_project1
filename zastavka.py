@@ -6,7 +6,7 @@ import random
 
 died = ''
 pygame.init()
-fontUI = pygame.font.Font(None, 30)
+font = pygame.font.Font(None, 30)
 
 
 def load_image(name, colorkey='black'):
@@ -62,7 +62,7 @@ def start_screen():
         clock.tick(FPS)
 
 
-class UI:
+class DRAW:
     def __init__(self):
         pass
 
@@ -75,7 +75,7 @@ class UI:
             if obj.type == 'tank':
                 pygame.draw.rect(screen, obj.color, (5 + i * 70, 5, 22, 22))
 
-                text = fontUI.render(str(obj.hp), 1, obj.color)
+                text = font.render(str(obj.hp), 1, obj.color)
                 rect = text.get_rect(center=(5 + i * 70 + 32, 5 + 11))
                 screen.blit(text, rect)
                 i += 1
@@ -221,7 +221,7 @@ def tanki():
             if obj.type == 'tank':
                 c += 1
             obj.update()
-        ui.update()
+        draww.update()
         screen.fill('black')
         if c != 2:
             screen.fill((0, 0, 0))
@@ -234,7 +234,7 @@ def tanki():
                 bullet.draw()
             for obj in objects:
                 obj.draw()
-            ui.draw()
+            draww.draw()
             pygame.display.update()
             clock.tick(FPS)
     start_screen()
@@ -369,7 +369,7 @@ tile_width = tile_height = 50
 Tank('blue', 90, 260, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
 Tank('red', 640, 260, 0, (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, pygame.K_RETURN))
 steps = [[0, -1], [1, 0], [0, 1], [-1, 0]]
-ui = UI()
+draww = DRAW()
 
 start_screen()
 
