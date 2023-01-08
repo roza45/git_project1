@@ -4,3 +4,4 @@
 [ball_sound.mp3.zip](https://github.com/roza45/git_project1/files/10366125/ball_sound.mp3.zip)
 [regulations.txt](https://github.com/roza45/git_project1/files/10368260/regulations.txt)
 [preview_music.zip](https://github.com/roza45/git_project1/files/10368267/preview_music.zip)
+![preview](https://user-images.githubusercontent.com/118614616/211194375-dadb9f5b-bfc9-4fc3-ba7a-ad61e117c245.png)
