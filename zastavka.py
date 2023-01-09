@@ -24,42 +24,133 @@ def terminate():
 
 
 def start_screen():
+    global kuda
+    pygame.mixer.music.load('data/preview_music.mp3')  # start_sound =
+    pygame.mixer.music.play(loops=-1, start=0.0, fade_ms=3000)
+    pygame.mixer.music.set_volume(0.1)
+    pygame.display.set_caption('Игра на двоих')
     main_text = ["ИГРА НА ДВОИХ",
                  "Правила игры",
                  "Чемпионат",
                  "Играть Пинг-Понг",
                  "Играть Танки"]
-    chet1 = chet2 = 0
-    fon = pygame.transform.scale(load_image('fon3.jpg'), (WIDTH, HEIGHT))
+    # chet1 = chet2 = 0
+    fon = pygame.transform.scale(load_image('true_preview.png'), (WIDTH, HEIGHT))
+
+    # группа, содержащая все спрайты
+    all_sprites = pygame.sprite.Group()
+
+    cur_image = load_image('arrow.png')
+    cur = pygame.sprite.Sprite(all_sprites)
+    cur.image = cur_image
+    cur.rect = cur.image.get_rect()
+
+    pygame.mouse.set_visible(False)
+    # pygame.display.flip()
     screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_koord = 50
+    # font = pygame.font.Font(None, 30)
+    font = pygame.font.SysFont('Comic Sans Ms', 30)
+    text_koord = 110
     koord = []
     for line in main_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'), (0, 50, 0))
+        string_rendered = font.render(line, 1, pygame.Color('black'), (255, 255, 255))  # (0, 50, 0)
         text_rect = string_rendered.get_rect()
+        # print(koord)
         text_koord += 10
         text_rect.top = text_koord
-        text_rect.x = 10
+        text_rect.x = 300
         text_koord += text_rect.height
         koord.append(text_rect)
         screen.blit(string_rendered, text_rect)
-
+    pygame.display.flip()
     while True:
+
+        screen.blit(fon, (0, 0))
+        # font = pygame.font.Font(None, 30)
+        font = pygame.font.SysFont('Comic Sans Ms', 30)
+        text_koord = 110
+        koord = []
+        for line in main_text:
+            string_rendered = font.render(line, 1, pygame.Color('black'), (255, 255, 255))  # (0, 50, 0)
+            text_rect = string_rendered.get_rect()
+            # print(koord)
+            text_koord += 10
+            text_rect.top = text_koord
+            text_rect.x = 300
+            text_koord += text_rect.height
+            koord.append(text_rect)
+            screen.blit(string_rendered, text_rect)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or \
+            if event.type == pygame.MOUSEMOTION:
+                cur.rect.x = event.pos[0]
+                cur.rect.y = event.pos[1]
+            if pygame.mouse.get_focused():
+                all_sprites.draw(screen)
+            if event.type == pygame.KEYDOWN or \
                     event.type == pygame.MOUSEBUTTONDOWN:
                 for rect in koord:
                     if rect.collidepoint(event.pos):
                         kuda = koord.index(rect)
                         if kuda == 4:
+                            pygame.mixer.music.stop()
+                            pygame.mouse.set_visible(True)
                             tanki()
-                        if kuda == 3:
+                            global objects, bullets, draww
+                            objects = []
+                            bullets = []
+                            Tank('blue', 90, 260, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
+                            Tank('red', 640, 260, 0,
+                                 (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, pygame.K_RETURN))
+                            draww = DRAW()
+                            start_screen()
+                        elif kuda == 3:
+                            pygame.mixer.music.stop()
+                            # pygame.mouse.set_visible(True)
                             ping()
+
+                        elif kuda == 2:
+
+                            tanki()
+                            pygame.mouse.set_visible(True)
+
+                        elif kuda == 1:
+                            pygame.mouse.set_visible(True)
+                            regulations()
+
+            pygame.display.flip()
+            clock.tick(FPS)
+
+
+def regulations():
+    screen = pygame.display.set_mode(size)
+    f1 = open('data/regulations.txt', encoding="utf-8")  # , mode="r"
+    intro_text = f1.readlines()
+    intro_text = [i.strip() for i in intro_text]
+    # print(intro_text)
+    play = True
+    text_x = text_y = 0
+    text_coord = 0
+    screen.fill((250, 231, 181))  # Бананомания
+    font1 = pygame.font.SysFont('Comic Sans Ms', 20)
+    for line in intro_text:
+        string_rendered = font1.render(line, 1, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 5
+        intro_rect.top = text_coord
+        intro_rect.x = 5
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+        # screen.blit(string_rendered, (text_x, text_y))
+    while play:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                play = False
         pygame.display.flip()
-        clock.tick(FPS)
+
+    start_screen()
 
 
 class DRAW:
@@ -194,6 +285,7 @@ class Block:
 
 def tanki():
     global died
+    global kuda
     for _ in range(50):
         while True:
             x = randint(0, WIDTH // tile - 1) * tile
@@ -208,6 +300,11 @@ def tanki():
                 break
 
         Block(x, y, tile)
+    # if kuda == 4:
+    #     screen.fill('black')
+    if kuda == 2:
+        fon = pygame.transform.scale(load_image('grass.jpg'), (WIDTH, HEIGHT))
+        # screen.blit(fon, (0, 0))
     play = True
     while play:
         for event in pygame.event.get():
@@ -222,7 +319,13 @@ def tanki():
                 c += 1
             obj.update()
         draww.update()
-        screen.fill('black')
+
+        if kuda == 4:
+            screen.fill('black')
+        elif kuda == 2:
+            # fon = pygame.transform.scale(load_image('grass.jpg'), (WIDTH, HEIGHT))
+            screen.blit(fon, (0, 0))
+
         if c != 2:
             screen.fill((0, 0, 0))
             font = pygame.font.Font(None, 50)
@@ -237,7 +340,7 @@ def tanki():
             draww.draw()
             pygame.display.update()
             clock.tick(FPS)
-    start_screen()
+    # start_screen()
 
 
 def ping():
@@ -251,7 +354,7 @@ def ping():
     ball_r = 10
     ball_d = 2 * ball_r
     ball_speed = 4
-    ball_start_x = WIDTH / 2
+    ball_start_x = WIDTH / 2 - ball_r
     ball_start_y = HEIGHT / 2
     dx = 1
     dy = -1
@@ -268,13 +371,16 @@ def ping():
 
     # pygame.display.set_caption('Ping-Pong')
     sound = pygame.mixer.Sound('data/ball_sound.mp3.mp3')
+
     pause = False
     game = True
-    while True:
+    while game:
         screen.fill(green)
+        pygame.draw.line(screen, (255, 255, 255), [int(WIDTH / 2), 0], [int(WIDTH / 2), HEIGHT], width=2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit()
+                game = False
+
         key = pygame.key.get_pressed()
         if key[pygame.K_UP] and racket_right.top > 0:
             racket_right.top -= racket_speed
@@ -302,12 +408,13 @@ def ping():
 
         if ball.centerx > WIDTH:
             point_right += 1
-            if point_left == 10:
+            if point_right == 10:
+                print('left')
                 game = False
-                txt = font.render('Выиграл игрок 2', True, 'white')
+                txt = font.render('Выиграл игрок 1', True, 'white')
                 screen.blit(txt, (250, 300))
                 pygame.display.update()
-                break
+                # break
             ball.x = ball_start_x
             ball.y = ball_start_y
 
@@ -319,7 +426,7 @@ def ping():
             point_left += 1
             if point_left == 10:
                 game = False
-                txt = font.render('Выиграл игрок 1', True, 'white')
+                txt = font.render('Выиграл игрок 2', True, 'white')
                 screen.blit(txt, (250, 300))
                 pygame.display.update()
                 break
@@ -346,15 +453,11 @@ def ping():
         screen.blit(left_player, (20, 560))
         pygame.display.flip()
         clock.tick(FPS)
+
     start_screen()
 
 
-
-
-
-
-
-FPS = 50
+FPS = 60
 steps = 5
 tile = 32
 size = WIDTH, HEIGHT = 800, 600
