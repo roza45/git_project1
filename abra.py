@@ -62,6 +62,13 @@ def start_screen():
                         if kuda == 4:
                             pygame.mixer.music.stop()
                             tanki()
+                            global objects, bullets, draww
+                            objects = []
+                            bullets = []
+                            Tank('blue', 90, 260, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
+                            Tank('red', 640, 260, 0,
+                                 (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, pygame.K_RETURN))
+                            draww = DRAW()
                             start_screen()
                         if kuda == 3:
                             pygame.mixer.music.stop()
