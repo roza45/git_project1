@@ -62,9 +62,11 @@ def start_screen():
                         if kuda == 4:
                             pygame.mixer.music.stop()
                             tanki()
+                            start_screen()
                         if kuda == 3:
                             pygame.mixer.music.stop()
                             ping()
+                            start_screen()
                         if kuda == 1:
                             regulations()
 
@@ -275,7 +277,7 @@ def tanki():
             draww.draw()
             pygame.display.update()
             clock.tick(FPS)
-    start_screen()
+
 
 
 def ping():
@@ -386,8 +388,6 @@ def ping():
         screen.blit(left_player, (20, 560))
         pygame.display.flip()
         clock.tick(FPS)
-
-    start_screen()
 
 
 
