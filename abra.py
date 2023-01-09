@@ -77,7 +77,6 @@ def regulations():
     f1 = open('data/regulations.txt', encoding="utf-8")  # , mode="r"
     intro_text = f1.readlines()
     intro_text=[i.strip() for i in intro_text]
-    print(intro_text)
     play = True
     text_x = text_y = 0
     text_coord = 0
