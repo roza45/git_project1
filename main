@@ -16,15 +16,6 @@ def load_image(name, colorkey='black'):  # colorkey='black'
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
     image = pygame.image.load(fullname)
-    # прозрачный цвет
-    # if colorkey is not None:
-    #     image = image.convert()
-    #     if colorkey == -1:
-    #         colorkey = image.get_at((0, 0))
-    #     image.set_colorkey(colorkey)
-    # else:
-    #     image = image.convert_alpha()
-
     return image
 
 
@@ -102,7 +93,9 @@ def start_screen():
                 for rect in koord:
                     if rect.collidepoint(event.pos):
                         kuda = koord.index(rect)
-                        if kuda == 4:
+                        if kuda == 4 or kuda == 2:
+                            if kuda == 2:
+                                far = []
                             pygame.mixer.music.stop()
                             pygame.mouse.set_visible(True)
                             tanki()
@@ -119,10 +112,10 @@ def start_screen():
                             # pygame.mouse.set_visible(True)
                             ping()
 
-                        elif kuda == 2:
-                            far = []
-                            tanki()
-                            pygame.mouse.set_visible(True)
+                        # elif kuda == 2:
+                        #     far = []
+                        #     tanki()
+                        #     pygame.mouse.set_visible(True)
 
                         elif kuda == 1:
                             pygame.mouse.set_visible(True)
@@ -302,32 +295,83 @@ class Block:
             far.append(self.x)
             far.append(self.y)
             objects.remove(self)
-            print(far)
+            # print(far)
+
+
+class BrickBlock:
+    def __init__(self, px, py, size):
+        objects.append(self)
+        self.type = 'block'
+
+        self.rect = pygame.Rect(px, py, size, size)
+        self.hp = 2
+
+        ##
+        self.x = px
+        self.y = py
+        ##
+
+    def update(self):
+        pass
+
+    def draw(self):  # draw_bric
+        screen.blit(imBv2, self.rect)
+
+    def damage(self, value):
+        global an_flag
+        self.hp -= value
+
+        if self.hp <= 0:
+            an_flag = True
+
+            far.append(self.x)
+            far.append(self.y)
+            objects.remove(self)
+            # print(far)
 
 
 def tanki():
     global died
     global kuda
     global an_flag
-    global pause_an
     global far
     an_flag = False
-    for _ in range(50):
-        while True:
-            x = randint(0, WIDTH // tile - 1) * tile
-            y = randint(0, HEIGHT // tile - 1) * tile
-            rect = pygame.Rect(x, y, tile, tile)
-            fined = False
-            for obj in objects:
-                if rect.colliderect(obj.rect):
-                    fined = True
+    if kuda == 4:
+        for _ in range(50):
+            while True:
+                x = randint(0, WIDTH // tile - 1) * tile
+                y = randint(0, HEIGHT // tile - 1) * tile
+                rect = pygame.Rect(x, y, tile, tile)
+                fined = False
+                for obj in objects:
+                    if rect.colliderect(obj.rect):
+                        fined = True
 
-            if not fined:
-                break
+                if not fined:
+                    break
 
-        Block(x, y, tile)
-    # if kuda == 4:
-    #     screen.fill('black')
+            Block(x, y, tile)
+    elif kuda == 2:
+        q = 1
+        for _ in range(25):
+            while True:
+                x = randint(0, WIDTH // tile - 1) * tile
+                y = randint(0, HEIGHT // tile - 1) * tile
+                rect = pygame.Rect(x, y, tile, tile)
+                fined = False
+                for obj in objects:
+                    if rect.colliderect(obj.rect):
+                        fined = True
+
+                if not fined:
+                    break
+            if q % 2 == 0:
+                Block(x, y, tile)
+                q += 1
+            else:
+                q += 1
+                BrickBlock(x, y, tile)
+        print(objects)
     if kuda == 2:
         fon = pygame.transform.scale(load_image('grass.jpg'), (WIDTH, HEIGHT))
 
@@ -352,9 +396,9 @@ def tanki():
             screen.fill('black')
         elif kuda == 2:
             screen.blit(fon, (0, 0))
-            pause_an = False
-            if an_flag:
 
+            # анимация:
+            if an_flag:
                 screen.blit(explosion_anim[counter], (far[-2], far[-1]))
                 counter = (counter + 1) % k
                 if counter > len(explosion_anim) - 1:
@@ -378,7 +422,6 @@ def tanki():
             clock.tick(FPS)
 
     # start_screen()
-    
 
 def ping():
     racket_w = 15  # width
@@ -514,7 +557,9 @@ objects = []
 bullets = []
 far = []
 imageblock = load_image('box.png')
+image_brick_block = load_image('brick_box.png')
 imB = pygame.transform.scale(imageblock, (tile, tile))
+imBv2 = pygame.transform.scale(image_brick_block, (tile, tile))
 
 tile_width = tile_height = 50
 Tank('blue', 90, 260, 0, (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE))
