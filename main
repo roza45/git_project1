@@ -406,11 +406,17 @@ def tanki():
                     an_flag = False
 
         # end
-        if c != 2:
+        if c == 1:
             screen.fill((0, 0, 0))
             font = pygame.font.Font(None, 50)
             text = font.render(f'Проиграл {died}', True, 'green')
             screen.blit(text, (250, 250))
+            pygame.display.update()
+        elif c == 0:
+            screen.fill((0, 0, 0))
+            font = pygame.font.Font(None, 50)
+            text = font.render('Ничья', True, 'green')
+            screen.blit(text, (300, 250))
             pygame.display.update()
         else:
             for bullet in bullets:
