@@ -541,8 +541,6 @@ def ping():
         pygame.display.flip()
         clock.tick(FPS)
 
-    start_screen()
-
 
 explosion_anim = []
 for i in range(9):
