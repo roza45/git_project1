@@ -16,3 +16,4 @@
 ![regularExplosion04](https://user-images.githubusercontent.com/118614616/211665000-c1978fe8-f887-42dd-9a83-271f62227360.png)
 ![regularExplosion05](https://user-images.githubusercontent.com/118614616/211665004-46708b09-c2be-403a-b155-fbbd52732424.png)
 ![regularExplosion06](https://user-images.githubusercontent.com/118614616/211665006-8ce580d3-640d-4649-b808-908a32f87c1c.png)
+![brick_box](https://user-images.githubusercontent.com/118614616/211763822-6b083ff2-5bb9-495e-bcf8-9f71ee4a5398.png)
