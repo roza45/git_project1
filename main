@@ -214,7 +214,7 @@ class Tank:
 
         for obj in objects:
             if obj != self and self.rect.colliderect(obj.rect) or not(0<= obj.rect[0] <= ((WIDTH // tile - 1) * tile)) or\
-                    not(0<= obj.rect[1] <= ((HEIGHT // tile - 1) * tile)):
+                    not(0<= obj.rect[1] <= ((HEIGHT // tile - 1) * tile + 30)):
                 self.rect.topleft = oldX, oldY
 
         if keys[self.keySHOT] and self.shotime == 0:
