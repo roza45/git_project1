@@ -416,7 +416,7 @@ def tanki():
             screen.fill((0, 0, 0))
             font = pygame.font.Font(None, 50)
             text = font.render('Ничья', True, 'green')
-            screen.blit(text, (300, 250))
+            screen.blit(text, (340, 250))
             pygame.display.update()
         else:
             for bullet in bullets:
